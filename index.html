@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Nuestra Historia</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+<style>
+body{
+margin:0;
+background:#f6efe6;
+font-family:Georgia, serif;
+overflow-x:hidden;
+}
+
+/* FUNDIDO ENTRE PANTALLAS */
+.screen{
+position:absolute;
+width:100%;
+height:100%;
+top:0;
+left:0;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+transition:opacity 1s ease;
+}
+.hidden{display:none;}
+
+/* CORAZON INICIAL CON LATIDO */
+.start-heart{
+width:90px;
+cursor:pointer;
+animation:pulse 1.5s infinite;
+transform-origin:center;
+}
+@keyframes pulse{
+0%,100%{transform:scale(1);}
+25%,75%{transform:scale(1.1);}
+50%{transform:scale(1.2);}
+}
+
+/* CARTA */
+.card{
+background:#fff8f0;
+padding:50px;
+border-radius:25px;
+box-shadow:0 20px 40px rgba(0,0,0,0.25);
+font-family:'Dancing Script', cursive;
+font-size:1.9rem;
+text-align:center;
+max-width:600px;
+animation:fadeIn 1.5s forwards;
+}
+@keyframes fadeIn{
+from{opacity:0; transform:scale(0.9);}
+to{opacity:1; transform:scale(1);}
+}
+.counter{
+margin-top:20px;
+font-size:1.4rem;
+font-weight:bold;
+}
+
+/* BOTONES */
+button{
+margin-top:20px;
+padding:12px 30px;
+border:none;
+border-radius:30px;
+background:#c86a6a;
+color:white;
+font-size:1rem;
+cursor:pointer;
+transition:0.3s;
+}
+button:hover{background:#a14c4c;}
+
+/* GALERIA */
+.gallery{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+min-height:100%;
+background:#f6efe6;
+display:none;
+padding:80px 40px;
+box-sizing:border-box;
+overflow-y:auto;
+}
+
+.photos{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:40px;
+}
+
+.polaroid{
+background:white;
+padding:15px;
+box-shadow:0 10px 20px rgba(0,0,0,0.2);
+text-align:center;
+opacity:0;
+transform:translateY(40px);
+transition:all 0.8s ease;
+cursor:pointer;
+position:relative;
+}
+
+/* Hover efecto fotos */
+.polaroid:hover{
+transform: scale(1.05) translateY(-5px);
+box-shadow:0 15px 30px rgba(0,0,0,0.3);
+transition: all 0.4s ease;
+}
+
+.polaroid img{
+width:100%;
+height:250px;
+object-fit:cover;
+}
+
+.polaroid span{
+display:block;
+margin-top:10px;
+font-size:0.9rem;
+}
+
+.show{
+opacity:1;
+transform:translateY(0);
+}
+
+/* Mensaje oculto */
+.hiddenMessage{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(255,248,240,0.95);
+display:flex;
+justify-content:center;
+align-items:center;
+text-align:center;
+padding:10px;
+font-size:1rem;
+border-radius:10px;
+box-sizing:border-box;
+opacity:0;
+transition:opacity 0.5s;
+pointer-events:none;
+}
+
+/* BOTON HAY ALGO MAS */
+.moreBtn{
+position:fixed;
+bottom:30px;
+right:30px;
+}
+
+/* PANTALLA FINAL */
+#screenFinal .card{
+animation:heartbeat 2s infinite;
+position:relative;
+}
+
+@keyframes heartbeat{
+0%,100%{transform:scale(1);}
+50%{transform:scale(1.05);}
+}
+
+.final-buttons{
+margin-top:30px;
+display:flex;
+gap:30px;
+justify-content:center;
+flex-wrap:wrap;
+}
+
+.signature{
+margin-top:30px;
+font-size:1.4rem;
+}
+
+.date{
+margin-top:10px;
+font-size:0.9rem;
+color:#666;
+font-family:Georgia;
+}
+.heart{
+position:absolute;
+width:20px;
+height:20px;
+z-index:1000;
+}
+
+/* Contenedor para confeti */
+#confettiContainer{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+pointer-events:none;
+overflow:hidden;
+}
+</style>
+</head>
+<body>
+
+<!-- PANTALLA 1 -->
+<div class="screen" id="screen1">
+<svg class="start-heart" id="startBtn" viewBox="0 0 32 29.6">
+<path fill="#c86a6a"
+d="M23.6,0c-3.4,0-6.3,2.1-7.6,5.1C14.7,2.1,11.8,0,8.4,0
+C3.8,0,0,3.8,0,8.4c0,9.5,16,21.2,16,21.2s16-11.7,16-21.2
+C32,3.8,28.2,0,23.6,0z"/>
+</svg>
+<h2 style="color:#a14c4c;">San Valentín</h2>
+</div>
+
+<!-- PANTALLA CARTA -->
+<div class="screen hidden" id="screen2">
+<div class="card">
+<p><strong>Para el amor de mi vida:</strong></p>
+<p>
+Si pudiera elegir un lugar seguro, te elegiría a ti sin duda.<br><br>
+Cuanto más tiempo estoy contigo, más te amo.
+</p>
+<p>Mi amor por ti comenzó hace:</p>
+<div class="counter" id="counter"></div>
+<button onclick="goGallery()">Continuar</button>
+</div>
+</div>
+
+<!-- GALERIA -->
+<div class="gallery" id="gallery">
+<div class="photos">
+<!-- Aquí tus fotos con mensajes ocultos -->
+<div class="polaroid"><img src="mes1.jpg"><span>Diciembre 2024 💘</span>
+<div class="hiddenMessage">Gracias por llegar a mi vida el día que no sabía que te estaba esperando</div></div>
+<div class="polaroid"><img src="mes2.jpg"><span>Enero 2025</span><div class="hiddenMessage"></div></div>
+<div class="polaroid"><img src="mes3.jpg"><span>Febrero 2025 ✈️ Primer viaje</span><div class="hiddenMessage"></div></div>
+<div class="polaroid"><img src="mes4.jpg"><span>Marzo 2025</span><div class="hiddenMessage"></div></div>
+<div class="polaroid"><img src="mes5.jpg"><span>Abril 2025</span><div class="hiddenMessage"></div></div>
+<div class="polaroid"><img src="mes6.jpg"><span>Mayo 2025</span><div class="hiddenMessage">Eres mi lugar seguro, incluso cuando el mundo no lo es</div></div>
+<div class="polaroid"><img src="mes7.jpg"><span>Junio 2025</span><div class="hiddenMessage"></div></div>
+<div class="polaroid"><img src="mes8.jpg"><span>Julio 2025</span><div class="hiddenMessage"></div></div>
+<div class="polaroid"><img src="mes9.jpeg"><span>Agosto 2025</span><div class="hiddenMessage"></div></div>
+<div class="polaroid"><img src="mes10.jpg"><span>Septiembre 2025</span><div class="hiddenMessage"></div></div>
+<div class="polaroid"><img src="mes11.jpeg"><span>Octubre 2025</span><div class="hiddenMessage">No sé qué nos depara el futuro, pero sí sé que quiero caminarlo contigo</div></div>
+<div class="polaroid"><img src="mes12.jpg"><span>Noviembre 2025 ✈️ Segundo viaje</span><div class="hiddenMessage"></div></div>
+<div class="polaroid"><img src="mes13.jpg"><span>Diciembre 2025 🎉 Primer aniversario</span><div class="hiddenMessage"></div></div>
+<div class="polaroid"><img src="mes14.jpg"><span>Enero 2026</span><div class="hiddenMessage"></div></div>
+<div class="polaroid"><img src="mes15.jpg"><span>Febrero 2026 — Esto solo es el principio</span><div class="hiddenMessage"></div></div>
+</div>
+<button class="moreBtn" onclick="goFinal()">Hay algo más...</button>
+</div>
+
+<!-- PANTALLA FINAL -->
+<div class="screen hidden" id="screenFinal">
+<div class="card" id="finalCard">
+<p id="finalQuestion">¿Quieres seguir construyendo una historia conmigo?</p>
+<div class="final-buttons">
+<button onclick="sayYes()">Sí, siempre 💕</button>
+<button id="runaway">Necesito pensarlo...</button>
+</div>
+<p id="finalMessage" style="margin-top:20px;font-size:1.5rem;"></p>
+<div class="signature">
+Con todo mi amor,<br>Jesús
+</div>
+<div class="date">14 de febrero de 2026</div>
+<div id="confettiContainer"></div>
+</div>
+</div>
+
+<audio id="bgMusic" src="musica.mp3"></audio>
+
+<script>
+const screen1=document.getElementById("screen1");
+const screen2=document.getElementById("screen2");
+const gallery=document.getElementById("gallery");
+const screenFinal=document.getElementById("screenFinal");
+const finalMessage=document.getElementById("finalMessage");
+
+// CORAZON INICIAL
+document.getElementById("startBtn").onclick=()=>{
+screen1.classList.add("hidden");
+screen2.classList.remove("hidden");
+};
+
+// CONTADOR
+function updateCounter(){
+const startDate=new Date("2024-12-14T20:30:00");
+const now=new Date();
+const diff=now-startDate;
+
+const days=Math.floor(diff/(1000*60*60*24));
+const hours=Math.floor((diff/(1000*60*60))%24);
+const minutes=Math.floor((diff/(1000*60))%60);
+const seconds=Math.floor((diff/1000)%60);
+
+document.getElementById("counter").textContent=
+`${days} días ${hours} horas ${minutes} minutos ${seconds} segundos`;
+}
+setInterval(updateCounter,1000);
+updateCounter();
+
+// IR A GALERIA
+function goGallery(){
+screen2.classList.add("hidden");
+gallery.style.display="block";
+const photos=document.querySelectorAll(".polaroid");
+photos.forEach((photo,i)=>{
+setTimeout(()=>photo.classList.add("show"), i*200);
+});
+}
+
+// MENSAJES OCULTOS INTEGRADOS
+const polaroids=document.querySelectorAll(".polaroid");
+polaroids.forEach(photo=>{
+let shown=false;
+photo.addEventListener("dblclick",()=>{
+const msgDiv=photo.querySelector(".hiddenMessage");
+if(!shown){
+msgDiv.style.opacity="1";
+shown=true;
+}else{
+msgDiv.style.opacity="0";
+shown=false;
+}
+});
+});
+
+// IR A FINAL
+function goFinal(){
+gallery.style.display="none";
+screenFinal.classList.remove("hidden");
+}
+
+// BOTON QUE HUYE
+const runaway=document.getElementById("runaway");
+runaway.addEventListener("mouseenter",()=>{
+const x=Math.random()*300-150;
+const y=Math.random()*200-100;
+runaway.style.transform=`translate(${x}px,${y}px)`;
+});
+
+// SI DICE QUE SI
+function sayYes(){
+document.getElementById("bgMusic").play();
+finalMessage.textContent="Y así comienza el capítulo más bonito de todos.";
+startHearts();
+setTimeout(startConfetti,1500);
+}
+
+// CORAZONES FINALES CON SVG Y BRISA
+function startHearts(){
+for(let i=0;i<50;i++){
+let h=document.createElement("div");
+h.className="heart";
+h.style.position="absolute";
+h.style.left=Math.random()*100+"vw";
+h.style.top="-50px";
+h.style.width="25px";
+h.style.height="25px";
+h.style.opacity=0.9;
+h.style.zIndex=1000;
+
+const colors=["#c86a6a","#e29595","#f4c2c2"];
+const color = colors[Math.floor(Math.random()*colors.length)];
+
+h.innerHTML = `<svg viewBox="0 0 32 29.6" width="100%" height="100%">
+<path fill="${color}" d="M23.6,0c-3.4,0-6.3,2.1-7.6,5.1C14.7,2.1,11.8,0,8.4,0
+C3.8,0,0,3.8,0,8.4c0,9.5,16,21.2,16,21.2s16-11.7,16-21.2
+C32,3.8,28.2,0,23.6,0z"/>
+</svg>`;
+
+document.body.appendChild(h);
+
+let horizontalOffset = Math.random()*50-25;
+h.animate([
+{ transform: `translateY(-50px) translateX(0px)` },
+{ transform: `translateY(110vh) translateX(${horizontalOffset}px)` }
+], { duration: (4000+Math.random()*3000), iterations: 1, easing: 'ease-in-out' });
+}
+}
+
+// CONFETI FINAL
+function startConfetti(){
+const confettiContainer=document.getElementById("confettiContainer");
+for(let i=0;i<80;i++){
+let c=document.createElement("div");
+c.style.position="absolute";
+c.style.width="12px";
+c.style.height="12px";
+c.style.background=["#c86a6a","#e29595","#f4c2c2"][Math.floor(Math.random()*3)];
+c.style.borderRadius="50%";
+c.style.left=Math.random()*100+"vw";
+c.style.top="-20px";
+c.style.opacity=0.9;
+confettiContainer.appendChild(c);
+let offsetX=Math.random()*100-50;
+c.animate([
+{transform:`translateY(0px) translateX(0px)`},
+{transform:`translateY(110vh) translateX(${offsetX}px) rotate(${Math.random()*360}deg)`}
+],{duration:4000+Math.random()*2000, iterations:1, easing:'ease-in'});
+}
+}
+</script>
+</body>
+</html>
